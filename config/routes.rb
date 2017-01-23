@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
   root 'pages#maintenance'
+
+  get '/wit' => 'pages#wit'
+  get '/request' => 'pages#demand'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
