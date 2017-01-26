@@ -138,7 +138,9 @@ var renderWeatherComponent = function( response ) {
   $( ".weather-summary" ).html( response[ "currently" ][ "summary" ] );
 
   // Get the high-low div ( which is also being used with last updated )
-  $( ".weather-high-low" ).html( "Last updated: <br/>" + response[ "currently" ][ "last_updated" ] );
+  // Temp workaround
+  var date = new Date();
+  $( ".weather-high-low" ).html( "Last updated: <br/>" + date.toLocaleString() );
 
 
 };
@@ -261,13 +263,75 @@ var renderPlaylistView = function( element ) {
   $( ".music" ).html( playlistFrame );
 };
 
+var getFeaturedPlaylist = function () {
+  var url = "/fetch_featured_playlist";
+
+  $.ajax( {
+    url: url,
+    method: "GET",
+    dataType: "JSON",
+    success: renderFeaturedPlaylist
+  } ).done( function () { console.log( "Featured playlists requested" ); } )
+};
+
+var renderFeaturedPlaylist = function ( response ) {
+
+  var msgWrapper = $( "<div></div>" ).addClass( "spotify-message" );
+  var msg = $( "<p></p>" ).html( response.message );
+  msgWrapper.append( msg );
+
+  var playlistWrapper = $( "<div></div>" ).addClass( "playlists" );
+
+  for( var i = 0; i < response.playlists.items.length; i++ ) {
+    var playlistAlbum = $( "<div></div>" ).addClass( "playlist-album" );
+    playlistAlbum.attr( "data-url", "https://embed.spotify.com/?uri=" + response.playlists.items[ i ].uri );
+
+    var album = $( "<img>" ).attr( {
+      "src": response.playlists.items[ i ].images[ 0 ].url,
+      "alt": response.playlists.items[ i ].name
+    } );
+    album.addClass( "album" );
+
+    playlistAlbum.append( album );
+    playlistWrapper.append( playlistAlbum );
+  }
+
+  $( ".music" ).html( "" );
+  $( ".music" ).append( msgWrapper );
+  $( ".music" ).append( playlistWrapper );
+
+  // Add event listener
+  setPlaylistListener();
+};
+
+var setupAnnyang = function () {
+  if ( annyang ) {
+    // Let's define a command.
+    var commands = {
+      "fancy update weather": renderWeather,
+      "fancy show all playlist": getFeaturedPlaylist,
+      "fancy show :category news": renderNewsFeed
+    };
+
+    // Add commands to annyang
+    annyang.addCommands( commands );
+
+    SpeechKITT.annyang();
+
+    SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css');
+
+    // Start listening.
+    SpeechKITT.vroom();
+  }
+};
+
 var renderInitialComponents = function () {
   renderGreetings();
   setPlaylistListener();
   renderWeather();
   setNewsFeedListener(); // Set event listener for news feed selection
+  setupAnnyang();
 };
-
 
 $( document ).ready( function () {
   // Initialise
