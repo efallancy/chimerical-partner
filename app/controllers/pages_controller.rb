@@ -79,7 +79,7 @@ class PagesController < ApplicationController
                             "max_temperature": tomorrow[ "temperatureMax" ]
                          }
 
-      weather_summary = { "currently": currently, "tomorrow": tomorrow_weather, "ipman": geo }
+      weather_summary = { "currently": currently, "tomorrow": tomorrow_weather, "ipman": request.remote_ip }
 
       # Return weather summary
       weather_summary
