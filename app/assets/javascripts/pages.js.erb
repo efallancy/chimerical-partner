@@ -147,21 +147,20 @@ var renderWeather = function () {
 
   var successCallback = function ( response ) {
 
-    // var lat = response.coords.latitude;
-    // var lng = response.coords.longitude;
-    // var accuracy = response.coords.accuracy;
+    var lat = response.coords.latitude;
+    var lng = response.coords.longitude;
+    var accuracy = response.coords.accuracy;
     var url = "/fetch_initial_weather"
-    // console.log( lat, lng );
+
     $.ajax( {
       url: url,
       method: "GET",
       dataType: "JSON",
       data: {
-        "lat": "-33.886225599999996",
-        "lng": "151.1963853"
+        "lat": lat,
+        "lng": lng
       },
       success: function( response ) {
-        console.log( response );
         renderWeatherComponent( response );
       }
     } ).done( function () { console.log( "Weather request sent!" ) } );
@@ -169,7 +168,6 @@ var renderWeather = function () {
 
   var errorCallback = function ( error ) {
     console.log( "Fetching current location permission is disabled." );
-    successCallback();
   };
 
   // Get the current location of the user
