@@ -55,6 +55,10 @@ class PagesController < ApplicationController
 
     # This will include the current requested weather and also forecast of the next day
     def get_current_weather( lat, lng )
+
+      geo = Geocoder.search( request.remote_ip )
+
+
       url = "https://api.darksky.net/forecast/#{ Rails.application.secrets.DARK_SKY_SECRET }/" + lat + "," + lng;
       options = { exclude: "[minutesly,hourly]", units: "auto" }
 
@@ -75,7 +79,7 @@ class PagesController < ApplicationController
                             "max_temperature": tomorrow[ "temperatureMax" ]
                          }
 
-      weather_summary = { "currently": currently, "tomorrow": tomorrow_weather }
+      weather_summary = { "currently": currently, "tomorrow": tomorrow_weather, "ipman": geo }
 
       # Return weather summary
       weather_summary

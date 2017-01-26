@@ -161,6 +161,7 @@ var renderWeather = function () {
         "lng": lng
       },
       success: function( response ) {
+        console.log( response );
         renderWeatherComponent( response );
       }
     } ).done( function () { console.log( "Weather request sent!" ) } );
