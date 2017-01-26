@@ -1,0 +1,122 @@
+.title {
+  text-align: center;
+  font-style: italic;
+}
+
+.misc {
+  background-color: salmon;
+  height: 90vh;
+  padding: 0;
+  margin: 0;
+}
+
+.news-feed {
+  background-color: deeppink;
+  height: 90vh;
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.news-details-quote {
+  background-color: gainsboro;
+  height: 90vh;
+  padding: 0;
+  margin: 0;
+}
+
+.news-content {
+  cursor: pointer;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.news-headline {
+  font-weight: bold;
+}
+
+.news-abstract {
+  font-style: italic;
+}
+
+.greetings {
+  background-color: ghostwhite;
+  height: 10%;
+  width: 100%;
+  overflow: auto;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.weather {
+  background-color: turquoise;
+  height: 30%;
+  width: 100%;
+}
+
+.current-weather {
+  height: 100%;
+  width: 100%;
+}
+
+.weather-details-top, .weather-details-bottom {
+  height: 50%;
+  overflow: auto;
+  position: relative;
+}
+
+.weather-details-top, .weather-details-bottom {
+  height: 50%;
+  overflow: auto;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.weather-info, .weather-summary, .weather-high-low {
+  height: 100%;
+  overflow: auto;
+  float: left;
+}
+
+.weather-icon {
+  height: 100%;
+  text-align: center;
+  float: left;
+}
+
+.weather-summary {
+  box-sizing: border-box;
+  padding: 5% 5px 0 5px;
+  text-align: center;
+}
+
+.weather-high-low {
+  text-align: center;
+  box-sizing: border-box;
+  padding: 10% 5px 0 5px;
+}
+
+.weather-info {
+  text-align: center;
+  box-sizing: border-box;
+  padding: 5% 5px 0 5px;
+}
+
+.custom-img {
+  height: 100%;
+  width: 100%;
+}
+
+.music {
+  background-color: rebeccapurple;
+  height: 60%;
+  width: 100%;
+}
+
+.quotes {
+  padding: 10px;
+  font-style: italic;
+  margin-top: 40%;
+}

@@ -1,0 +1,237 @@
+var renderNewsFeedComponent = function( data ) {
+  var totalItems = data.num_results;
+  var results = data.results;
+
+  var news_feed = $( "#newsfeed" );
+  news_feed.html( "" ); // Start with clean slate whenever new feeds being request
+
+  console.log( results );
+
+  for( var index = 0; index < totalItems; index++ ) {
+    // Append the news details
+    var newsContainer = $( "<div></div>" ).addClass( "news-content" );
+    var newsHeadline = $( "<p></p>" ).addClass( "news-headline" );
+    var newsAbstract = $( "<p></p>" ).addClass( "news-abstract" );
+    var newsByline = $( "<p></p>" ).addClass( "news-author" );
+
+    newsHeadline.html( results[ index ].title );
+    newsAbstract.html( results[ index ].abstract );
+    newsByline.html( results[ index ].byline );
+
+    newsContainer.attr( "data-url", results[ index ].url );
+    newsContainer.css( "width", "100%" );
+
+    newsContainer.append( newsHeadline );
+    newsContainer.append( newsAbstract );
+    newsContainer.append( newsByline );
+    newsContainer.on( "click", function () {
+      renderNewsDetails( $( this ).attr( "data-url" ) );
+    } );
+
+    news_feed.append( newsContainer );
+  }
+};
+
+var renderNewsDetails = function( url ) {
+  var iframe = $( "<iframe></iframe>" ).attr( {
+                                                "src": url,
+                                                "width": "100%",
+                                                "height": "100%",
+                                                "frameborder": "0",
+                                                "allowtransparency": "true"
+                                              } );
+
+  var fallbackLinkAnchor = $( "<a></a>" ).attr( "href", url ).html( "Click here for full article" );
+  var fallbackLinkDOM = $( "<p></p>" ).append( fallbackLinkAnchor );
+
+  var newsDetailsSection = $( "#news-details" );
+  newsDetailsSection.html( iframe );
+};
+
+var renderQuoteComponent = function( response ) {
+  response = response[ 0 ];
+
+  var quoteContainer = $( "<div></div>" ).addClass( "quotes" );
+  var quoteText = response.content;
+  var quoteAuthor = $( "<p></p>" ).html( response.title );
+  var newsDetailsSection = $( "#news-details" );
+
+  quoteContainer.html( quoteText ); // The quote itself has already provide the DOM element
+  quoteContainer.append( quoteAuthor );
+  newsDetailsSection.append( quoteContainer );
+
+};
+
+var renderQuote = function() {
+  var url = "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1&callback=";
+
+  $.ajax( {
+    url: url,
+    method: "GET",
+    dataType: "JSON",
+    success: function ( response ) {
+      // Render the news component
+      renderQuoteComponent( response );
+    },
+    cache: false
+  }).done( function () { console.log( "Quote request sent!" ) } );
+};
+
+var renderNewsFeed = function () {
+  var url = "https://api.nytimes.com/svc/topstories/v2/home.json";
+
+  $.ajax( {
+    url: url,
+    method: "GET",
+    dataType: "JSON",
+    data: {
+      "api-key": "e79ed067dc1340f6ae4db6d11d875835"
+    },
+    success: function ( response ) {
+      // Render the news component
+      renderNewsFeedComponent( response );
+    }
+  }).done( function () { console.log( "News request sent!" ) } );
+
+};
+
+var renderWeatherComponent = function( response ) {
+  console.log( response );
+
+  var iconImg = {
+                  "clear-day": '<%= image_path( "weather/Sun.svg" )%>',
+                  "clear-night": '<%= image_path( "weather/Moon.svg" )%>',
+                  "rain": '<%= image_path( "weather/Cloud-Rain.svg" )%>',
+                  "snow": '<%= image_path( "weather/Snowflake.svg" )%>',
+                  "sleet": '<%= image_path( "weather/Snowflake.svg" )%>',
+                  "wind": '<%= image_path( "weather/Wind.svg" )%>',
+                  "fog": '<%= image_path( "weather/Cloud-Fog.svg" )%>',
+                  "cloudy": '<%= image_path( "weather/Cloud.svg" )%>',
+                  "partly-cloudy-day": '<%= image_path( "weather/Cloud-Sun.svg" )%>',
+                  "partly-cloudy-night": '<%= image_path( "weather/Cloud-Moon.svg" )%>',
+                  "hail": '<%= image_path( "weather/Cloud-Hail.svg" )%>',
+                  "thunderstorm": '<%= image_path( "weather/Cloud-Lightning.svg" )%>',
+                  "tornado": '<%= image_path( "weather/Tornado.svg" )%>'
+                };
+
+  // Get the weather icon div
+  var icon = $( "<img>" ).attr( "src", iconImg[ response[ "currently" ][ "icon" ] ] );
+  $( ".weather-icon" ).html( icon );
+
+  // Get the temperature div
+  $( ".weather-info" ).html( Math.round( response[ "currently" ][ "temperature" ] ) + "&#176;" )
+
+  // Get the summary div
+  $( ".weather-summary" ).html( response[ "currently" ][ "summary" ] );
+
+  // Get the high-low div ( which is also being used with last updated )
+  $( ".weather-high-low" ).html( "Last updated: <br/>" + response[ "currently" ][ "last_updated" ] );
+
+
+};
+
+var renderWeather = function () {
+
+  var successCallback = function ( response ) {
+
+    var lat = response.coords.latitude;
+    var lng = response.coords.longitude;
+    var accuracy = response.coords.accuracy;
+    var url = "/fetch_initial_weather"
+
+    console.log( "Lat:", lat );
+    console.log( "Lng:", lng );
+    console.log( "Accuracy", accuracy );
+
+    $.ajax( {
+      url: url,
+      method: "GET",
+      dataType: "JSON",
+      data: {
+        "lat": lat,
+        "lng": lng
+      },
+      success: function( response ) {
+        renderWeatherComponent( response );
+      }
+    } ).done( function () { console.log( "Weather request sent!" ) } );
+  };
+
+  var errorCallback = function ( error ) {
+    console.log( "Fetching current location permission is disabled." );
+  };
+
+  // Get the current location of the user
+  navigator.geolocation.getCurrentPosition( successCallback, errorCallback );
+};
+
+var renderGreetings = function () {
+  var date = new Date();
+  var hours = date.getHours();
+  console.log( hours );
+  if( hours <= 2 ) {
+    var message = "Go to bed!";
+    renderGreetingsComponent( message );
+  } else if( hours > 2 && hours < 6 ) {
+    var message = "Sleep tight!";
+    renderGreetingsComponent( message );
+  } else if( hours >= 6 && hours <= 8 ) {
+    var message = "Hello Sunshine!";
+    renderGreetingsComponent( message );
+  } else if( hours > 8 && hours <= 10 ) {
+    var message = "Morning Snoring!";
+    renderGreetingsComponent( message );
+  } else if( hours > 10 && hours < 12 ) {
+    var message = "Good morning!";
+    renderGreetingsComponent( message );
+  } else if( hours >= 12 && hours < 14 ) {
+    var message = "Good afternoon!";
+    renderGreetingsComponent( message );
+  } else if( hours >= 14 && hours < 17 ) {
+    var message = "Afternoon matey!";
+    renderGreetingsComponent( message );
+  } else if( hours >= 17 && hours < 21 ) {
+    var message = "Good evening!";
+    renderGreetingsComponent( message );
+  } else if( hours >= 21 && hours <= 24 ) {
+    var message = "Beauty sleep time!";
+    renderGreetingsComponent( message );
+  }
+
+};
+
+var renderGreetingsComponent = function ( message ) {
+  var greetingsContainer = $( "<p></p>" ).addClass( "greets" );
+  greetingsContainer.html( message );
+
+  $( ".greetings" ).append( greetingsContainer );
+};
+
+var getFeaturedPlaylists = function () {
+  $.ajax( {
+    url: "https://api.spotify.com/v1/browse/featured-playlists",
+    method: "GET",
+    dataType: "JSONP",
+    headers: {
+      'Authorization': "Bearer BQDwx2S4b89nbia1niyHnud6jdapKMRaB-rcWXa03FB66_J2CjxHsQ21GL6NiNskpcPWoYm1qY_VXszMINn68g",
+    },
+    success: function( response ) {
+      console.log( response );
+    }
+  } ).done( function () { console.log( "Spotify request sent!" ) } );
+};
+
+var renderInitialComponents = function () {
+  renderGreetings();
+  // getFeaturedPlaylists();
+  renderWeather();
+  // renderNewsFeed(); // Will populate the news feed
+  // renderQuote(); // Will populate the far right section with quote
+};
+
+
+$( document ).ready( function () {
+  // Initialise
+  renderInitialComponents();
+
+} );

@@ -1,0 +1,38 @@
+<h1 class="title">Chimerical Partner</h1>
+
+<div class="pure-g container">
+  <!-- Will have the greetings, weather and music playlist -->
+  <div class="pure-u-6-24 misc" id="misc">
+    <div class="greetings">
+    </div>
+    <div class="weather">
+      <div class="current-weather">
+        <div class="pure-g weather-details-top">
+          <div class="pure-u-1-2 weather-icon">
+            <%= image_tag( image_path( "weather/Umbrella.svg" ), class: "custom-img" ) %>
+          </div>
+          <div class="pure-u-1-2 weather-info">?&#176;</div>
+        </div>
+        <div class="pure-g weather-details-bottom">
+          <div class="pure-u-1-2 weather-summary">
+            Please ensure that you enable location settings in your browser.
+          </div>
+          <div class="pure-u-1-2 weather-high-low">
+            <%= image_tag( image_path( "weather/Shades.svg" ), class: "custom-img" ) %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="music">
+      <!-- <iframe src="https://embed.spotify.com/?uri=spotify:user:spotify:playlist:1GQLlzxBxKTb6tJsD4RxHI" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe> -->
+    </div>
+  </div>
+  <div class="pure-u-8-24 news-feed" id="newsfeed"></div>
+  <div class="pure-u-10-24 news-details-quote" id="news-details">
+    <div class="quotes">
+      <%= @initial_state[ :quote ][ :content ].html_safe %>
+      <p><%= @initial_state[ :quote ][ :author ] %></p>
+    </div>
+  </div>
+</div>

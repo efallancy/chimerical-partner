@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
 
-  root 'pages#maintenance'
+  root 'pages#chime'
 
-  get '/wit' => 'pages#wit'
-  get '/request' => 'pages#demand'
+  get '/commands' => 'pages#commands'
+  get '/fetch_initial_weather' => 'pages#fetch_initial_weather'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
