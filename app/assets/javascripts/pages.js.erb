@@ -48,6 +48,27 @@ var renderNewsDetails = function( url ) {
   newsDetailsSection.html( iframe );
 };
 
+var renderNewsArticle = function ( article ) {
+  if( article === "first" ) {
+    var news = $( ".news-content" ).eq( 0 );
+    renderNewsDetails( news );
+  } else if( article === "second" ) {
+    var news = $( ".news-content" ).eq( 1 );
+    renderNewsDetails( news );
+  } else if( article === "third" ) {
+    var news = $( ".news-content" ).eq( 2 );
+    renderNewsDetails( news );
+  } else if( article === "fourth" ) {
+    var news = $( ".news-content" ).eq( 3 );
+    renderNewsDetails( news );
+  } else if( article === "fifth" ) {
+    var news = $( ".news-content" ).eq( 4 );
+    renderNewsDetails( news );
+  }
+
+
+};
+
 
 var renderNewsFeed = function ( category ) {
 
@@ -317,7 +338,8 @@ var setupAnnyang = function () {
     var commands = {
       "fancy update weather": renderWeather,
       "fancy show all playlist": getFeaturedPlaylist,
-      "fancy show :category news": renderNewsFeedBySpeech
+      "fancy show :category news": renderNewsFeedBySpeech,
+      "fancy show :article article": renderNewsArticle
     };
 
     // Add commands to annyang
@@ -331,6 +353,7 @@ var setupAnnyang = function () {
     SpeechKITT.vroom();
   }
 };
+
 
 var renderInitialComponents = function () {
   renderGreetings();
