@@ -73,7 +73,7 @@
     </div>
     <div class="news-list" id="newslist">
       <% @initial_state[ :news ][ "results" ].each do | article | %>
-        <div class="news-content" data-url="<%= article[ "url" ] %>">
+        <div class="news-content" data-url="https://www.google.com/search?q=<%= article[ "url" ] %>">
           <p class="news-headline"><%= article[ "title" ] %></p>
           <p class="news-abstract"><%= article[ "abstract" ] %></p>
           <p class="news-author"><%= article[ "byline" ] %></p>
