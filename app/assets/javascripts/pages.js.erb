@@ -5,8 +5,6 @@ var renderNewsFeedComponent = function( data ) {
   var news_list = $( "#newslist" );
   news_list.html( "" ); // Start with clean slate whenever new feeds being request
 
-  console.log( results );
-
   for( var index = 0; index < totalItems; index++ ) {
     // Append the news details
     var newsContainer = $( "<div></div>" ).addClass( "news-content" );
@@ -154,10 +152,6 @@ var renderWeather = function () {
     var accuracy = response.coords.accuracy;
     var url = "/fetch_initial_weather"
 
-    console.log( "Lat:", lat );
-    console.log( "Lng:", lng );
-    console.log( "Accuracy", accuracy );
-
     $.ajax( {
       url: url,
       method: "GET",
@@ -183,7 +177,7 @@ var renderWeather = function () {
 var renderGreetings = function () {
   var date = new Date();
   var hours = date.getHours();
-  console.log( hours );
+
   if( hours <= 2 ) {
     var message = "Go to bed!";
     renderGreetingsComponent( message );
