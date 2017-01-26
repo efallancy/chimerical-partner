@@ -30,6 +30,7 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 5px;
+  width: 100%;
 }
 
 .news-headline {
@@ -40,8 +41,15 @@
   font-style: italic;
 }
 
+.news-nav {
+  background-color: salmon;
+}
+
 .greetings {
   background-color: ghostwhite;
+}
+
+.greetings, .news-nav {
   height: 10%;
   width: 100%;
   overflow: auto;
@@ -80,10 +88,21 @@
   float: left;
 }
 
-.weather-icon {
+.weather-icon, .weather-refresh {
   height: 100%;
   text-align: center;
   float: left;
+}
+
+.weather-temp {
+  padding-top: 15%;
+  font-size: 22px;
+}
+
+.weather-refresh img {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 .weather-summary {
@@ -95,13 +114,14 @@
 .weather-high-low {
   text-align: center;
   box-sizing: border-box;
-  padding: 10% 5px 0 5px;
+  padding: 5% 5px 0 5px;
 }
 
 .weather-info {
   text-align: center;
   box-sizing: border-box;
   padding: 5% 5px 0 5px;
+  font-size: 16px;
 }
 
 .custom-img {
@@ -113,10 +133,37 @@
   background-color: rebeccapurple;
   height: 60%;
   width: 100%;
+  overflow: auto;
 }
 
 .quotes {
   padding: 10px;
   font-style: italic;
   margin-top: 40%;
+}
+
+.spotify-message {
+  height: 20%;
+  text-align: center;
+  width: 100%;
+}
+
+.playlists {
+  padding: 3px;
+  width: 100%;
+  height: 80%;
+}
+
+.playlist-album {
+  float: left;
+  display: inline-block;
+  width: 31%;
+  height: 40%;
+  margin: 1px;
+}
+
+.album {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }

@@ -9,7 +9,6 @@ class PagesController < ApplicationController
   def commands
     # Get parameter value for user message
     # command = params[ "user_message" ]
-
   end
 
   def fetch_initial_weather
@@ -22,10 +21,23 @@ class PagesController < ApplicationController
     render json: response
   end
 
+  def fetch_news
+    news = get_news( params[ "category" ] )
+    render json: news
+  end
+
+  def fetch_quote
+    render json: get_quote
+  end
+
+  def fetch_featured_playlist
+    render json: get_spotify_featured_playlist_data
+  end
+
   private
 
     def init
-      initial = { "quote": get_quote }
+      initial = { "quote": get_quote, "news": get_news( "home" ), "spotify": get_spotify_featured_playlist_data }
 
       # Return initial as json
       initial
@@ -71,14 +83,33 @@ class PagesController < ApplicationController
 
     # NYTimes results based on the category specified.
     #  Default is home
-    def get_news
+    def get_news( category = "home" )
+      url = "https://api.nytimes.com/svc/topstories/v2/#{ category }.json"
+      options = { api_key: Rails.application.secrets.NY_TIMES_TOP_STORIES_KEY }
+
+      response = HTTParty.get( url, :query => options )
+
+      response
     end
 
     # Spotify playlist
-    def get_spotify_playlist
+    def get_spotify_featured_playlist_data
       # Using terminal to execure the GET/POST request
+      res_access = `curl -H \"Authorization: Basic #{ Rails.application.secrets.SPOTIFY_BASE64_ENCODED }\" -d grant_type=client_credentials https://accounts.spotify.com/api/token`
+
+      res_access_json = JSON.parse( res_access )
+
+      res_token = res_access_json[ "access_token" ]
+
+      # Currently limit to 6 playlists!
+      res_featured_playlist = `curl -i -X GET "https://api.spotify.com/v1/browse/featured-playlists?limit=6" -H "Authorization: Bearer #{ res_token }"`
+
+      res_msg = res_featured_playlist.split( "\r\n\r\n" ) # Workaround!!!
+      playlists = res_msg[ 1 ] # Assumingly it will always be the last
+
+      p featured_playlists_data = JSON.parse( playlists )
+
+      featured_playlists_data
     end
-
-
 
 end

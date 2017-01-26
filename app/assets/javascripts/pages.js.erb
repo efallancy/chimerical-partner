@@ -2,8 +2,8 @@ var renderNewsFeedComponent = function( data ) {
   var totalItems = data.num_results;
   var results = data.results;
 
-  var news_feed = $( "#newsfeed" );
-  news_feed.html( "" ); // Start with clean slate whenever new feeds being request
+  var news_list = $( "#newslist" );
+  news_list.html( "" ); // Start with clean slate whenever new feeds being request
 
   console.log( results );
 
@@ -28,7 +28,7 @@ var renderNewsFeedComponent = function( data ) {
       renderNewsDetails( $( this ).attr( "data-url" ) );
     } );
 
-    news_feed.append( newsContainer );
+    news_list.append( newsContainer );
   }
 };
 
@@ -48,46 +48,26 @@ var renderNewsDetails = function( url ) {
   newsDetailsSection.html( iframe );
 };
 
-var renderQuoteComponent = function( response ) {
-  response = response[ 0 ];
 
-  var quoteContainer = $( "<div></div>" ).addClass( "quotes" );
-  var quoteText = response.content;
-  var quoteAuthor = $( "<p></p>" ).html( response.title );
-  var newsDetailsSection = $( "#news-details" );
+var renderNewsFeed = function ( category ) {
 
-  quoteContainer.html( quoteText ); // The quote itself has already provide the DOM element
-  quoteContainer.append( quoteAuthor );
-  newsDetailsSection.append( quoteContainer );
+  var url = "/fetch_news";
 
-};
-
-var renderQuote = function() {
-  var url = "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1&callback=";
-
-  $.ajax( {
-    url: url,
-    method: "GET",
-    dataType: "JSON",
-    success: function ( response ) {
-      // Render the news component
-      renderQuoteComponent( response );
-    },
-    cache: false
-  }).done( function () { console.log( "Quote request sent!" ) } );
-};
-
-var renderNewsFeed = function () {
-  var url = "https://api.nytimes.com/svc/topstories/v2/home.json";
 
   $.ajax( {
     url: url,
     method: "GET",
     dataType: "JSON",
     data: {
-      "api-key": "e79ed067dc1340f6ae4db6d11d875835"
+      "category": category
     },
     success: function ( response ) {
+      // Clear the iframe panel
+      $( "#news-details" ).html( "" );
+
+      // Rerender the quote
+      renderQuote();
+
       // Render the news component
       renderNewsFeedComponent( response );
     }
@@ -95,8 +75,23 @@ var renderNewsFeed = function () {
 
 };
 
+
+var setNewsFeedListener = function () {
+  // When selecting category
+  $( "select" ).on( "change", function () {
+    var selected = $( this ).val();
+
+    renderNewsFeed( selected );
+  } );
+
+  // When clicking on the articles
+  $( ".news-content").on( "click", function () {
+    renderNewsDetails( $( this ).attr( "data-url" ) );
+  } );
+
+};
+
 var renderWeatherComponent = function( response ) {
-  console.log( response );
 
   var iconImg = {
                   "clear-day": '<%= image_path( "weather/Sun.svg" )%>',
@@ -119,7 +114,27 @@ var renderWeatherComponent = function( response ) {
   $( ".weather-icon" ).html( icon );
 
   // Get the temperature div
-  $( ".weather-info" ).html( Math.round( response[ "currently" ][ "temperature" ] ) + "&#176;" )
+  var tempWrapper = $( "<div></div>" ).addClass( "pure-g" );
+  tempWrapper.addClass( "weather-info-temp-wrapper" );
+
+  var imageRefreshDiv = $( "<div></div>" ).addClass( "weather-refresh" );
+  imageRefreshDiv.addClass( "pure-u-1-2" );
+  var imageRefresh = $( "<img>" ).attr( {
+                        "src": '<%= image_path( "weather/Cloud-Refresh.svg" ) %>',
+                        "alt": "refresh",
+                        "title": "Show current weather"
+                      } );
+
+  imageRefresh.on( "click" , function () { renderWeather(); } );
+  imageRefreshDiv.append( imageRefresh );
+
+  var tempDiv = $( "<div></div>" ).addClass( "weather-temp" );
+  tempDiv.addClass( "pure-u-1-2" );
+  tempDiv.html( Math.round( response[ "currently" ][ "temperature" ] ) + "&#176;" );
+
+  tempWrapper.append( imageRefreshDiv );
+  tempWrapper.append( tempDiv );
+  $( ".weather-info" ).html( tempWrapper );
 
   // Get the summary div
   $( ".weather-summary" ).html( response[ "currently" ][ "summary" ] );
@@ -207,26 +222,56 @@ var renderGreetingsComponent = function ( message ) {
   $( ".greetings" ).append( greetingsContainer );
 };
 
-var getFeaturedPlaylists = function () {
+var renderQuote = function () {
+  var url = "/fetch_quote";
   $.ajax( {
-    url: "https://api.spotify.com/v1/browse/featured-playlists",
+    url: url,
     method: "GET",
-    dataType: "JSONP",
-    headers: {
-      'Authorization': "Bearer BQDwx2S4b89nbia1niyHnud6jdapKMRaB-rcWXa03FB66_J2CjxHsQ21GL6NiNskpcPWoYm1qY_VXszMINn68g",
-    },
-    success: function( response ) {
-      console.log( response );
+    dataType: "JSON",
+    success: function ( response ) {
+      // Render the quote!
+      var quoteContainer = $( '<div></div>' ).addClass( "quotes" );
+      var content = response.content;
+      var author = $( "<p></p>" ).css( "text-align", "center" ).html( "~ " + response.author + " ~" );
+
+      quoteContainer.append( content );
+      quoteContainer.append( author );
+      $( "#news-details" ).append( quoteContainer );
     }
-  } ).done( function () { console.log( "Spotify request sent!" ) } );
+  } );
+};
+
+var setPlaylistListener = function () {
+  var playlists = $( ".playlist-album" );
+
+  if( playlists.length > 0 ) {
+    for( var i = 0; i < playlists.length; i++ ) {
+      playlists.eq( i ).on( "click", function () {
+        renderPlaylistView( $( this ) );
+      } );
+    }
+  }
+};
+
+var renderPlaylistView = function( element ) {
+  var playlistFrame = $( "<iframe></iframe>" );
+
+  playlistFrame.attr( {
+    "src": element.attr( "data-url" ),
+    "width": "100%",
+    "height": "100%",
+    "frameborder": "0",
+    "allowtransparency": "true"
+  } );
+
+  $( ".music" ).html( playlistFrame );
 };
 
 var renderInitialComponents = function () {
   renderGreetings();
-  // getFeaturedPlaylists();
+  setPlaylistListener();
   renderWeather();
-  // renderNewsFeed(); // Will populate the news feed
-  // renderQuote(); // Will populate the far right section with quote
+  setNewsFeedListener(); // Set event listener for news feed selection
 };
 
 

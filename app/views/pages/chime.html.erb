@@ -25,14 +25,66 @@
 
     </div>
     <div class="music">
-      <!-- <iframe src="https://embed.spotify.com/?uri=spotify:user:spotify:playlist:1GQLlzxBxKTb6tJsD4RxHI" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe> -->
+      <div class="spotify-message">
+        <p><%= @initial_state[ :spotify ][ "message" ] %></p>
+      </div>
+      <div class="playlists">
+        <% @initial_state[ :spotify ][ "playlists" ][ "items" ].each do | playlist | %>
+          <div class="playlist-album" data-url="https://embed.spotify.com/?uri=<%= playlist[ "uri" ] %>">
+            <img src="<%= playlist[ "images" ].first[ "url" ] %>" alt="<%= playlist[ "name" ] %>" class="album">
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-  <div class="pure-u-8-24 news-feed" id="newsfeed"></div>
+  <div class="pure-u-8-24 news-feed" id="newsfeed">
+    <div class="news-nav">
+      <p>
+      News categories:
+        <select name="sections" id="news-section">
+          <option value="home">Home</option>
+          <option value="opinion">Opinion</option>
+          <option value="world">World</option>
+          <option value="national">National</option>
+          <option value="politics">Politics</option>
+          <option value="upshot">Upshot</option>
+          <option value="nyregion">New York Region</option>
+          <option value="business">Business</option>
+          <option value="technology">Technology</option>
+          <option value="science">Science</option>
+          <option value="health">Health</option>
+          <option value="sports">Sports</option>
+          <option value="arts">Arts</option>
+          <option value="books">Books</option>
+          <option value="movies">Movies</option>
+          <option value="theater">Theater</option>
+          <option value="sundayreview">Sunday Review</option>
+          <option value="fashion">Fashion</option>
+          <option value="tmagazine">Times Magazine</option>
+          <option value="food">Food</option>
+          <option value="travel">Travel</option>
+          <option value="magazine">Magazine</option>
+          <option value="realestate">Realestate</option>
+          <option value="automobiles">Automobiles</option>
+          <option value="obituaries">Obituaries</option>
+          <option value="insider">Insider</option>
+        </select>
+      </p>
+    </div>
+    <div class="news-list" id="newslist">
+      <% @initial_state[ :news ][ "results" ].each do | article | %>
+        <div class="news-content" data-url="<%= article[ "url" ] %>">
+          <p class="news-headline"><%= article[ "title" ] %></p>
+          <p class="news-abstract"><%= article[ "abstract" ] %></p>
+          <p class="news-author"><%= article[ "byline" ] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
   <div class="pure-u-10-24 news-details-quote" id="news-details">
     <div class="quotes">
       <%= @initial_state[ :quote ][ :content ].html_safe %>
-      <p><%= @initial_state[ :quote ][ :author ] %></p>
+      <p style="text-align: center">~ <%= @initial_state[ :quote ][ :author ] %> ~</p>
     </div>
   </div>
 </div>
