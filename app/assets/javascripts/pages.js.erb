@@ -151,14 +151,14 @@ var renderWeather = function () {
     var lng = response.coords.longitude;
     var accuracy = response.coords.accuracy;
     var url = "/fetch_initial_weather"
-
+    console.log( lat, lng );
     $.ajax( {
       url: url,
       method: "GET",
       dataType: "JSON",
       data: {
-        "lat": lat,
-        "lng": lng
+        "lat": "-33.886225599999996",
+        "lng": "151.1963853"
       },
       success: function( response ) {
         console.log( response );
@@ -169,6 +169,7 @@ var renderWeather = function () {
 
   var errorCallback = function ( error ) {
     console.log( "Fetching current location permission is disabled." );
+    successCallback();
   };
 
   // Get the current location of the user
