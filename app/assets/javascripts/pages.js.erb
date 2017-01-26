@@ -147,9 +147,9 @@ var renderWeather = function () {
 
   var successCallback = function ( response ) {
 
-    var lat = response.coords.latitude;
-    var lng = response.coords.longitude;
-    var accuracy = response.coords.accuracy;
+    // var lat = response.coords.latitude;
+    // var lng = response.coords.longitude;
+    // var accuracy = response.coords.accuracy;
     var url = "/fetch_initial_weather"
     console.log( lat, lng );
     $.ajax( {
