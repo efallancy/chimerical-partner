@@ -16,7 +16,9 @@ var renderNewsFeedComponent = function( data ) {
     newsAbstract.html( results[ index ].abstract );
     newsByline.html( results[ index ].byline );
 
-    newsContainer.attr( "data-url", results[ index ].url );
+    var url = results[ index ].url;
+    var newUrl = url.replace( /http:/, "https:" )
+    newsContainer.attr( "data-url", newUrl );
     newsContainer.css( "width", "100%" );
 
     newsContainer.append( newsHeadline );
