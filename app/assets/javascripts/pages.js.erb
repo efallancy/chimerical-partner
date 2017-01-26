@@ -73,6 +73,11 @@ var renderNewsFeed = function ( category ) {
 
 };
 
+var renderNewsFeedBySpeech = function ( category ) {
+  $( "select" ).val( category );
+  renderNewsFeed( category );
+};
+
 
 var setNewsFeedListener = function () {
   // When selecting category
@@ -310,7 +315,7 @@ var setupAnnyang = function () {
     var commands = {
       "fancy update weather": renderWeather,
       "fancy show all playlist": getFeaturedPlaylist,
-      "fancy show :category news": renderNewsFeed
+      "fancy show :category news": renderNewsFeedBySpeech
     };
 
     // Add commands to annyang
