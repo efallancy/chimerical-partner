@@ -108,7 +108,7 @@ class PagesController < ApplicationController
       res_token = res_access_json[ "access_token" ]
 
       # Currently limit to 6 playlists!
-      res_featured_playlist = `curl -i -X GET "https://api.spotify.com/v1/browse/featured-playlists?limit=6" -H "Authorization: Bearer #{ res_token }"`
+      res_featured_playlist = `curl -i -X GET "https://api.spotify.com/v1/browse/featured-playlists?limit=6&country=AU" -H "Authorization: Bearer #{ res_token }"`
 
       res_msg = res_featured_playlist.split( "\r\n\r\n" ) # Workaround!!!
       playlists = res_msg[ 1 ] # Assumingly it will always be the last
