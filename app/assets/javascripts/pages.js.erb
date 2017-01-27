@@ -245,6 +245,7 @@ var renderGreetingsComponent = function ( message ) {
   var greetingsContainer = $( "<p></p>" ).addClass( "greets" );
   greetingsContainer.html( message );
 
+  $( ".greetings" ).html( "" );
   $( ".greetings" ).append( greetingsContainer );
 };
 
