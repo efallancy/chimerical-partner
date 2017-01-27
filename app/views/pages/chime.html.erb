@@ -30,7 +30,7 @@
       </div>
       <div class="playlists">
         <% @initial_state[ :spotify ][ "playlists" ][ "items" ].each do | playlist | %>
-          <div class="playlist-album" data-url="<%= playlist[ "uri" ] %>">
+          <div class="playlist-album" data-url="https://embed.spotify.com/?uri=<%= playlist[ "uri" ] %>">
             <img src="<%= playlist[ "images" ].first[ "url" ] %>" alt="<%= playlist[ "name" ] %>" class="album">
           </div>
         <% end %>

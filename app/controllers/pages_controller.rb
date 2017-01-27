@@ -56,9 +56,10 @@ class PagesController < ApplicationController
     # This will include the current requested weather and also forecast of the next day
     def get_current_weather( lat, lng )
 
-      geo = Geocoder.search( request.remote_ip ) # Just in case for fallback plan ;)
-      p geo[ "latitude" ]
-      p geo[ "longitude" ]
+      # geo = Geocoder.search( request.remote_ip ) # Just in case for fallback plan ;)
+
+      # p geo[ 0 ].latitude # Just in case for fallback plan ;)
+      # p geo[ 0 ].longitude # Just in case for fallback plan ;)
 
       url = "https://api.darksky.net/forecast/#{ Rails.application.secrets.DARK_SKY_SECRET }/" + lat + "," + lng;
       options = { exclude: "[minutesly,hourly]", units: "auto" }
