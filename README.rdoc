@@ -1,28 +1,10 @@
-== README
+== Chimerial Partner
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This app is created based on the concept of having the user to be able to see what's happening right now in the news.
+Also, this is presented in a view of a dashboard.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Notes:
+* There are few things to tweak especially rendering the full view of the news to be displayed
+* Having to display the weather result properly
+* To integrate the music app with the user account
+* There is still a need to change the representation of the data and its layout
