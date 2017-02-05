@@ -33,19 +33,43 @@ var renderNewsFeedComponent = function( data ) {
 };
 
 var renderNewsDetails = function( url ) {
-  var iframe = $( "<iframe></iframe>" ).attr( {
-                                                "src": url,
-                                                "width": "100%",
-                                                "height": "100%",
-                                                "frameborder": "0",
-                                                "allowtransparency": "true"
-                                              } );
+  // $.ajax( {
+  //   url: "/fetch_scrap_news",
+  //   method: "GET",
+  //   dataType: "JSON",
+  //   data: {
+  //     uri: url
+  //   },
+  //   success: function( response ) {
+  //     console.log( response.document );
 
-  var fallbackLinkAnchor = $( "<a></a>" ).attr( "href", url ).html( "Click here for full article" );
-  var fallbackLinkDOM = $( "<p></p>" ).append( fallbackLinkAnchor );
+      var iframe = $( "<iframe></iframe>" ).attr( {
+                                                    "src": url,
+                                                    "width": "100%",
+                                                    "height": "100%",
+                                                    "frameborder": "0",
+                                                    "allowtransparency": "true"
+                                                  } );
 
-  var newsDetailsSection = $( "#news-details" );
-  newsDetailsSection.html( iframe );
+      // Display the content
+      // console.log( iframe );
+      //
+      var newsDetailsSection = $( "#news-details" );
+      newsDetailsSection.html( iframe );
+      //
+      // var doc = $( "iframe" )[ 0 ].contentWindow.document;
+      // // doc.domain = "http://www.newyorktimes.com";
+      // doc.open();
+      // doc.write( response.document );
+      // doc.close();
+      // doc.documentElement.innerHTML = response;
+
+      // var fallbackLinkAnchor = $( "<a></a>" ).attr( "href", url ).html( "Click here for full article" );
+      // var fallbackLinkDOM = $( "<p></p>" ).append( fallbackLinkAnchor );
+
+  //   }
+  // } ).done( function() { console.log( "Request for scrapping sent" ); } );
+
 };
 
 var renderNewsArticle = function ( article ) {
@@ -114,7 +138,6 @@ var setNewsFeedListener = function () {
   $( ".news-content").on( "click", function () {
 
     renderNewsDetails( $( this ).attr( "data-url" ) );
-
   } );
 
 };

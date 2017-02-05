@@ -167,6 +167,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.0)
   jquery-rails
+  nokogiri
   pg (~> 0.15)
   pry-rails
   rails (= 4.2.6)
@@ -178,4 +179,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.13.7
+   1.14.3

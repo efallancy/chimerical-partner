@@ -34,6 +34,17 @@ class PagesController < ApplicationController
     render json: get_spotify_featured_playlist_data
   end
 
+  def fetch_scrap_news
+    require 'open-uri'
+
+    if params[ :uri ]
+      p params[ :uri ]
+
+      htmldoc = Nokogiri::HTML( open( params[ :uri ] ) )
+      render json: { "document": htmldoc.to_s }
+    end
+  end
+
   private
 
     def init
